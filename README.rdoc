@@ -4,11 +4,11 @@
 
 I fixed an error with a deprecated item in #add_with_validation_group method.  See the instructions in the original README below, except add the following line to your environment.rb:
 
-  config.gem 'wizardly_gt'
+  config.gem 'wizardly_gt', :lib => 'wizardly'
 
 Instead of:
 
-  config.gem 'wizardly_gt', :lib => "wizardly"
+  config.gem 'wizardly'
 
 == Resources
 
