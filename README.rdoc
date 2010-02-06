@@ -1,6 +1,14 @@
-= wizardly
+= wizardly_gt
 
-+wizardly+ creates a multi-step wizard for any ActiveRecord model in three steps.
++wizardly+ by Jeff Patmon creates a multi-step wizard for any ActiveRecord model in three steps.
+
+I fixed an error with a deprecated item in #add_with_validation_group method.  See the instructions in the original README below, except add the following line to your environment.rb:
+
++config.gem 'wizardly_gt'+
+
+Instead of:
+
++config.gem 'wizardly'+
 
 == Resources
 
