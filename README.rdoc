@@ -8,7 +8,7 @@ I fixed an error with a deprecated item in #add_with_validation_group method.  S
 
 Instead of:
 
-+config.gem 'wizardly'+
++config.gem 'wizardly_gt', :lib => "wizardly"+
 
 == Resources
 
