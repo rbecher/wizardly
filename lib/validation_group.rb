@@ -105,10 +105,12 @@ module ValidationGroup
     module Errors # included in ActiveRecord::Errors
       # gaveeno: modified this method to fix error associated with deprecated method per this comment:
       # http://alexkira.blogspot.com/2007/09/rails-validation-using-validation.html?showComment=1235667300000#c1858075936669114503
-      def add_with_validation_group(attribute,
-        msg = I18n.translate('activerecord.errors.messages')[:invalid], *args, &block)
+      # def add_with_validation_group(attribute, msg = @@default_error_messages[:invalid], *args, &block)
+      def add_with_validation_group(attribute, msg = I18n.translate('activerecord.errors.messages')[:invalid], *args, &block)
         # jeffp: setting @current_validation_fields and use of should_validate? optimizes code
-        add_error = @base.respond_to?(:should_validate?) ? @base.should_validate?(attribute.to_sym) : true
+        # gaveeno: modified this method to add error if the error is on the base object and not on an attribute.
+        # this is necessary to work with the advanced_exceptions plugin.
+        add_error = @base.respond_to?(:should_validate?) ? (@base.should_validate?(attribute.to_sym) || attribute == :base) : true
         add_without_validation_group(attribute, msg, *args, &block) if add_error
       end
 
