@@ -101,8 +101,25 @@ module ValidationGroup
         valid_without_validation_group?
       end
     end
+  end
 
-    module Errors # included in ActiveRecord::Errors
+  module Util
+    # Return array consisting of current and its superclasses down to and
+    # including base_class.
+    def self.current_and_ancestors(current)
+      returning [] do |klasses|
+        klasses << current
+        root = current.base_class
+        until current == root
+          current = current.superclass
+          klasses << current
+        end
+      end
+    end
+  end
+  
+  module ActiveModel
+    module Errors # included in ActiveModel::Errors
       # gaveeno: modified this method to fix error associated with deprecated method per this comment:
       # http://alexkira.blogspot.com/2007/09/rails-validation-using-validation.html?showComment=1235667300000#c1858075936669114503
       # def add_with_validation_group(attribute, msg = @@default_error_messages[:invalid], *args, &block)
@@ -127,24 +144,9 @@ module ValidationGroup
       end
     end
   end
-
-  module Util
-    # Return array consisting of current and its superclasses down to and
-    # including base_class.
-    def self.current_and_ancestors(current)
-      returning [] do |klasses|
-        klasses << current
-        root = current.base_class
-        until current == root
-          current = current.superclass
-          klasses << current
-        end
-      end
-    end
-  end
 end
 
 # jeffp:  moved from init.rb for gemification purposes -- 
 # require 'validation_group' loads everything now, init.rb requires 'validation_group' only
 ActiveRecord::Base.send(:extend, ValidationGroup::ActiveRecord::ActsMethods)
-ActiveRecord::Errors.send :include, ValidationGroup::ActiveRecord::Errors
+ActiveModel::Errors.send :include, ValidationGroup::ActiveModel::Errors
